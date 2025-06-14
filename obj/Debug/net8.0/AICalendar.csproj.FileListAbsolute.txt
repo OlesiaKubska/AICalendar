@@ -31,3 +31,4 @@ C:\Users\kuble\AICalendar\obj\Debug\net8.0\refint\AICalendar.dll
 C:\Users\kuble\AICalendar\obj\Debug\net8.0\AICalendar.pdb
 C:\Users\kuble\AICalendar\obj\Debug\net8.0\AICalendar.genruntimeconfig.cache
 C:\Users\kuble\AICalendar\obj\Debug\net8.0\ref\AICalendar.dll
+C:\Users\kuble\AICalendar\obj\Debug\net8.0\AICalendar.sourcelink.json
