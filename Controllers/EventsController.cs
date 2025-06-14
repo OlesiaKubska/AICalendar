@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using AICalendar.Models;
+using AICalendar.Services;
 
 namespace AICalendar.Controllers
 {
@@ -46,6 +47,22 @@ namespace AICalendar.Controllers
 
             Events.Remove(ev);
             return Ok("Deleted");
+        }
+
+        [HttpPost("find-slot")]
+        public IActionResult FindFreeSlot([FromBody] SlotRequest request)
+        {
+            var result = TimeSlotFinderService.FindFreeSlot(
+                Events,
+                request.Participants,
+                request.From,
+                request.To,
+                request.Duration);
+
+            if (result == null)
+                return NotFound("No available slot");
+
+            return Ok(new { start = result });
         }
     }
 }
