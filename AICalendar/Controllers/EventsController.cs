@@ -74,5 +74,38 @@ namespace AICalendar.Controllers
 
             return Ok(new { start = result });
         }
+
+        // GET: /api/v1/events/next-week
+        [HttpGet("next-week")]
+        public IActionResult GetEventsForNextWeek()
+        {
+            var today = DateTime.Today;
+            var nextWeek = today.AddDays(7);
+            var nextWeekEvents = Events.Where(e => e.Start >= today && e.Start < nextWeek).ToList();
+            return Ok(nextWeekEvents);
+        }
+
+        // GET: /api/v1/events/next-week/table
+        [HttpGet("next-week/table")]
+        public ContentResult GetEventsForNextWeekAsTable()
+        {
+            var today = DateTime.Today;
+            var nextWeek = today.AddDays(7);
+            var nextWeekEvents = Events.Where(e => e.Start >= today && e.Start < nextWeek).ToList();
+
+            var html = "<table border='1'><tr><th>Title</th><th>Description</th><th>Participants</th><th>Start</th><th>End</th></tr>";
+            foreach (var ev in nextWeekEvents)
+            {
+                html += $"<tr>"
+                    + $"<td>{System.Net.WebUtility.HtmlEncode(ev.Title)}</td>"
+                    + $"<td>{System.Net.WebUtility.HtmlEncode(ev.Description)}</td>"
+                    + $"<td>{string.Join(", ", ev.Participants.Select(System.Net.WebUtility.HtmlEncode))}</td>"
+                    + $"<td>{ev.Start}</td>"
+                    + $"<td>{ev.End}</td>"
+                    + "</tr>";
+            }
+            html += "</table>";
+            return Content(html, "text/html");
+        }
     }
 }
