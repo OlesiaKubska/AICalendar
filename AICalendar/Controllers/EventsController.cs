@@ -22,6 +22,16 @@ namespace AICalendar.Controllers
             return Ok(ev);
         }
 
+        // GET: /api/v1/events/{id}
+        [HttpGet("{id}")]
+        public IActionResult GetById(Guid id)
+        {
+            var ev = Events.FirstOrDefault(e => e.Id == id);
+            if (ev == null) return NotFound();
+
+            return Ok(ev);
+        }
+
         // PUT: /api/v1/events/{id}
         [HttpPut("{id}")]
         public IActionResult Update(Guid id, [FromBody] CalendarEvent updated)

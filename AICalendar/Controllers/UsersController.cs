@@ -19,6 +19,16 @@ namespace AICalendar.Controllers
             return Ok(user);
         }
 
+        // GET: /api/v1/users/{id}
+        [HttpGet("{id}")]
+        public IActionResult GetById(Guid id)
+        {
+            var user = Users.FirstOrDefault(u => u.Id == id);
+            if (user == null) return NotFound();
+
+            return Ok(user);
+        }
+
         [HttpPut("{id}")]
         public IActionResult Update(Guid id, [FromBody] User updated)
         {
