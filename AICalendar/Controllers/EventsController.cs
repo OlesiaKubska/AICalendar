@@ -107,5 +107,28 @@ namespace AICalendar.Controllers
             html += "</table>";
             return Content(html, "text/html");
         }
+
+        [HttpPost("prompt")]
+        public IActionResult HandlePrompt([FromBody] PromptRequest request)
+        {
+            var prompt = request.Prompt ?? string.Empty;
+            var response = PromptProcessor.Process(prompt);
+            return Ok(response);
+        }
+
+        // Dummy PromptProcessor implementation for demonstration
+        public static class PromptProcessor
+        {
+            public static string Process(string prompt)
+            {
+                // Replace with actual logic as needed
+                return $"Processed prompt: {prompt}";
+            }
+        }
+
+        public class PromptRequest
+        {
+            public string? Prompt { get; set; }
+        }
     }
 }
