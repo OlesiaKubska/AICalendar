@@ -17,6 +17,10 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(8080); // порт Render
+});
 
 var app = builder.Build();
 
@@ -28,7 +32,6 @@ app.UseCors("AllowFrontend");
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
 
 app.UseHttpsRedirection();
 
