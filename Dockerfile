@@ -2,11 +2,15 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
+# Copy csproj and restore
 COPY AICalendar/*.csproj ./AICalendar/
-WORKDIR /app/AICalendar
-RUN dotnet restore
+RUN dotnet restore ./AICalendar/AICalendar.csproj
 
-COPY AICalendar/. ./
+# Copy the rest of the code
+COPY AICalendar/. ./AICalendar/
+WORKDIR /app/AICalendar
+
+# Build
 RUN dotnet publish -c Release -o out
 
 # STAGE 2: Run
