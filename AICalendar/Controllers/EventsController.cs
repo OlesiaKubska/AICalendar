@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using AICalendar.Models;
 using AICalendar.Services;
+using System.Text.RegularExpressions;
+using AICalendar.DTOs;
+using System.Linq;
+
 
 namespace AICalendar.Controllers
 {
@@ -8,17 +12,16 @@ namespace AICalendar.Controllers
     [Route("api/v1/events")]
     public class EventsController : ControllerBase
     {
-        private static readonly List<CalendarEvent> Events = new();
 
         // GET: /api/v1/events
         [HttpGet]
-        public IActionResult GetAll() => Ok(Events);
+        public IActionResult GetAll() => Ok(EventService.GetAll());
 
         // POST: /api/v1/events
         [HttpPost]
-        public IActionResult Create([FromBody] CalendarEvent ev)
+        public IActionResult Create([FromBody] EventDto ev)
         {
-            Events.Add(ev);
+            EventService.CreateEvent(ev);
             return Ok(ev);
         }
 
@@ -26,22 +29,21 @@ namespace AICalendar.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(Guid id)
         {
-            var ev = Events.FirstOrDefault(e => e.Id == id);
+            var ev = EventService.GetAll().FirstOrDefault(e => e.Id == id);
             if (ev == null) return NotFound();
-
             return Ok(ev);
         }
 
         // PUT: /api/v1/events/{id}
         [HttpPut("{id}")]
-        public IActionResult Update(Guid id, [FromBody] CalendarEvent updated)
+        public IActionResult Update(Guid id, [FromBody] EventDto updated)
         {
-            var ev = Events.FirstOrDefault(e => e.Id == id);
+            var ev = EventService.GetAll().FirstOrDefault(e => e.Id == id);
             if (ev == null) return NotFound();
 
             ev.Title = updated.Title;
             ev.Description = updated.Description;
-            ev.Participants = updated.Participants;
+            ev.Participants = updated.Participants.ToList();
             ev.Start = updated.Start;
             ev.End = updated.End;
 
@@ -52,18 +54,30 @@ namespace AICalendar.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
         {
-            var ev = Events.FirstOrDefault(e => e.Id == id);
-            if (ev == null) return NotFound();
+            var deleted = EventService.DeleteById(id);
+            if (!deleted)
+                return NotFound();
 
-            Events.Remove(ev);
             return Ok("Deleted");
         }
 
         [HttpPost("find-slot")]
         public IActionResult FindFreeSlot([FromBody] SlotRequest request)
         {
+            var events = EventService.GetAll()
+                .Select(e => new CalendarEvent
+                {
+                    Id = e.Id,
+                    Title = e.Title,
+                    Description = e.Description ?? string.Empty,
+                    Start = e.Start,
+                    End = e.End,
+                    Participants = e.Participants.ToArray()
+                })
+                .ToList();
+
             var result = TimeSlotFinderService.FindFreeSlot(
-                Events,
+                events,
                 request.Participants,
                 request.From,
                 request.To,
@@ -81,7 +95,7 @@ namespace AICalendar.Controllers
         {
             var today = DateTime.Today;
             var nextWeek = today.AddDays(7);
-            var nextWeekEvents = Events.Where(e => e.Start >= today && e.Start < nextWeek).ToList();
+            var nextWeekEvents = EventService.GetAll().Where(e => e.Start >= today && e.Start < nextWeek).ToList();
             return Ok(nextWeekEvents);
         }
 
@@ -91,7 +105,7 @@ namespace AICalendar.Controllers
         {
             var today = DateTime.Today;
             var nextWeek = today.AddDays(7);
-            var nextWeekEvents = Events.Where(e => e.Start >= today && e.Start < nextWeek).ToList();
+            var nextWeekEvents = EventService.GetAll().Where(e => e.Start >= today && e.Start < nextWeek).ToList();
 
             var html = "<table border='1'><tr><th>Title</th><th>Description</th><th>Participants</th><th>Start</th><th>End</th></tr>";
             foreach (var ev in nextWeekEvents)
@@ -116,19 +130,5 @@ namespace AICalendar.Controllers
             return Ok(response);
         }
 
-        // Dummy PromptProcessor implementation for demonstration
-        public static class PromptProcessor
-        {
-            public static string Process(string prompt)
-            {
-                // Replace with actual logic as needed
-                return $"Processed prompt: {prompt}";
-            }
-        }
-
-        public class PromptRequest
-        {
-            public string? Prompt { get; set; }
-        }
     }
 }
