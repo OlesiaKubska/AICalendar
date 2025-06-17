@@ -1,0 +1,22 @@
+# Build artifacts
+bin/
+obj/
+*.user
+*.suo
+
+# Rider/VSCode settings
+.vscode/
+.idea/
+
+# Test result files
+*.trx
+*.TestResults/
+
+# Logs
+*.log
+
+# Dependency directories
+packages/
+
+# User-specific files
+*.swp
