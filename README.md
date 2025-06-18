@@ -14,11 +14,21 @@ AI Calendar is an ASP.NET Core WebAPI for managing personal calendar events. It 
 
 ## 🛠️ Tech Stack
 
-- .NET 9 ASP.NET Core
-- MCP SDK + LLM Integration
-- React + Vite + TypeScript
-- Swagger / OpenAPI
-- FullCalendar (for frontend UI)
+- **Backend:** .NET 8 ASP.NET Core WebAPI
+- **LLM Integration:** PromptProcessor + MCP server
+- **Frontend:** React + Vite + TypeScript, FullCalendar
+- **Swagger / OpenAPI** for testing
+- **Docker** for deployment
+
+## 🔗 Links
+
+- 🖥️ Backend API: [Render](https://aicalendar-gqcp.onrender.com)
+
+- 📘 Swagger UI: [Swagger](https://aicalendar-gqcp.onrender.com/swagger)
+
+- 💻 Frontend GitHub: [ai-calendar-ui](https://github.com/OlesiaKubska/ai-calendar-ui)
+
+- 🌐 Frontend Live [GitHub Pages deployment](https://olesiakubska.github.io/ai-calendar-ui/)
 
 ## 📌 Main Endpoints
 
@@ -42,11 +52,13 @@ DELETE /api/v1/events/{eventId}/participants/{userId}
 ```
 
 ### 💬 Prompt Executor
+
 ```http
 POST /api/v1/events/prompt
 ```
 
 ### 🧪 Free Slot Finder
+
 ```http
 POST /api/v1/events/find-slot
 ```
@@ -60,16 +72,21 @@ POST /api/v1/events/find-slot
 - Optionally integrates with Google, Microsoft, Apple Calendars
 
 ### 🌐 Frontend UI
+
 - React + TailwindCSS + Vite
 - FullCalendar for event display
 - PromptExecutor.tsx for entering natural language instructions
 
 ### 🧪 Testing
+
 ✅ Unit-tested free-slot finder algorithm (TimeSlotFinderService)
 
 ✅ Prompt processor tested manually and via Swagger
 
 ### ⚙️ Getting Started
+
+#### Backend
+
 ```
 # 1. Clone the repo
 git clone https://github.com/OlesiaKubska/ai-calendar.git
@@ -80,35 +97,35 @@ cd AICalendar
 dotnet run
 ```
 
-### 💻 Frontend (React + TailwindCSS + Vite)
-- The frontend source code is available in a separate repository:
-
--- 🔗 GitHub: [ai-calendar-ui](https://github.com/OlesiaKubska/ai-calendar-ui)
-
--- 🌐 Live site: [GitHub Pages deployment](https://olesiakubska.github.io/ai-calendar-ui/)
-
-- To run the frontend locally:
+#### You can also run via Docker:
 
 ```
-# 1. Clone the frontend repository
+docker build -t aicalendar .
+docker run -p 8080:8080 aicalendar
+```
+
+#### Frontend (ai-calendar-ui)
+
+```
 git clone https://github.com/OlesiaKubska/ai-calendar-ui.git
 cd ai-calendar-ui
-
-# 2. Install dependencies
 npm install
-
-# 3. Run development server
 npm run dev
 ```
 
 ### ✅ Completed Tasks
- - Full WebAPI for events and participants
- - Prompt endpoint for LLM integration
- - Frontend UI for calendar and prompt
- - Free-slot search algorithm
- - Unit testing
+
+- Full WebAPI for events and participants
+- Prompt endpoint for LLM integration
+- Frontend UI for calendar and prompt
+- Free-slot search algorithm
+- Unit testing
+- Docker support
+- Deployed backend (Render) & frontend (GitHub Pages)
 
 # 👩‍💻 Author
+
 Olesia Kubska
--  🔗 GitHub: github.com/OlesiaKubska
--  📧 Email: kublesia0908@gmail.com
+
+- 🔗 GitHub: github.com/OlesiaKubska
+- 📧 Email: kublesia0908@gmail.com
