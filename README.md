@@ -1,6 +1,6 @@
 # 📅 AI Calendar WebAPI
 
-AI Calendar is an ASP.NET Core WebAPI for managing personal calendar events. It supports Natural Language Prompts, multi-user scheduling, and LLM integration via MCP.
+**AI Calendar** is an ASP.NET Core WebAPI for managing personal calendar events. It supports natural language prompts, multi-user scheduling, and can integrate with LLMs via MCP. Backend is deployed on Render, frontend on GitHub Pages.
 
 ## 🚀 Features
 
